@@ -6,7 +6,9 @@
   "scripts": {
     "start": "npm run build && node -r dotenv/config dist/src/server.js",
     "build": "tsc",
-    "bundle": "parcel build src/lambda.ts --target=node -o dist/lambda.js --bundle-node-modules --no-source-maps",
+    "bundle": "tsc --noEmit && parcel build src/lambda.ts --target=node -o dist/lambda.js --bundle-node-modules --no-source-maps",
+    "deploy:aws": "aws lambda update-function-code --function-name kintai-automator --zip-file fileb://./dist/lambda.zip",
+    "deploy": "npm run bundle && zip -j dist/lambda.zip dist/lambda.js && npm run deploy:aws",
     "format": "prettier --write src/*.ts",
     "lint": "tslint src/*.ts",
     "lint:fix": "tslint --fix src/*.ts",
