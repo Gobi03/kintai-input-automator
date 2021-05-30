@@ -28,6 +28,8 @@ commands:
   setup:
     steps:
       - checkout
+      - aws-cli/install
+      - aws-cli/setup
       - run: npm install
 
 jobs:
