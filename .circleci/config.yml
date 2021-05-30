@@ -11,15 +11,11 @@ executors:
 workflows:
   main:
     jobs:
-      # - deploy-approval:
-      #     type: approval
-      #     filters:
-      #       branches:
-      #         only:
-      #           - master
-      - deploy
-          # requires:
-          #   - deploy-approval
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
 
 commands:
   deploy:
