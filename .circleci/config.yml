@@ -1,0 +1,39 @@
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@2.0.2
+
+executors:
+  default:
+    docker:
+      - image: circleci/node:14-browsers
+
+workflows:
+  main:
+    jobs:
+      # - deploy-approval:
+      #     type: approval
+      #     filters:
+      #       branches:
+      #         only:
+      #           - master
+      - deploy
+          # requires:
+          #   - deploy-approval
+
+commands:
+  deploy:
+    steps:
+      - run: npm run deploy
+  setup:
+    steps:
+      - checkout
+      - run: npm install
+
+jobs:
+  deploy:
+    executor:
+      name: default
+    steps:
+      - setup
+      - deploy
