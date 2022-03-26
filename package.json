@@ -20,7 +20,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^15.6.0",
-    "minimist": ">=1.2.5",
+    "minimist": ">=1.2.6",
     "npm-check-updates": "^11.5.13",
     "parcel": "^1.12.4",
     "prettier": "^2.3.0",
@@ -37,6 +37,6 @@
     "@slack/bolt": "^3.3.0",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
-    "minimist": ">=1.2.5"
+    "minimist": ">=1.2.6"
   }
 }
