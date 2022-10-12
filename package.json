@@ -3,10 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/src/server.js",
+  "bundler": "dist/lambda.js",
+  "targets": {
+    "main": false,
+    "bundler": {
+      "context": "node",
+      "outputFormat": "commonjs",
+      "isLibrary": true,
+      "includeNodeModules": true
+    }
+  },
   "scripts": {
     "start": "npm run build && node -r dotenv/config dist/src/server.js",
     "build": "tsc",
-    "bundle": "tsc --noEmit && parcel build src/lambda.ts --target=node -o dist/lambda.js --bundle-node-modules --no-source-maps",
+    "bundle": "tsc --noEmit && parcel build src/lambda.ts --no-source-maps --no-optimize",
     "deploy:aws": "aws lambda update-function-code --function-name kintai-automator --zip-file fileb://./dist/lambda.zip",
     "deploy": "npm run bundle && zip -j dist/lambda.zip dist/lambda.js && npm run deploy:aws",
     "format": "prettier --write src/*.ts",

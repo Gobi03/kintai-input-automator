@@ -35,6 +35,14 @@ Slack 部屋から勤怠情報を引っ張ってきて、勤務表に自動入�
     $ npm run bundle
     ```
     で `dist/lambda.js` にバンドル結果が吐かれるので Lambda に設置
+
+    - 現状だと、バンドル結果の861行目の、
+
+        ```
+        for(var i = 0; i < opts.retries; i++)timeouts.push(this.createTimeout(i, opts));
+        ```
+
+        の記述を手動削除しないと動かない。
 1. 環境変数に `.env.example` の内容をセット
 1. 環境変数の `TZ` に `Asia/Tokyo` をセット
 1. API Gateway で `/{year}/{month}/{day}` パスの GET リソースを作って、 CORS を許可する
