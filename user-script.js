@@ -1,18 +1,22 @@
 // ==UserScript==
 // @name         kintai-automator
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.4
 // @description  .
 // @author       https://github.com/Gobi03
-// @match        https://opthd--teamspirit.visualforce.com/apex/AtkWorkTimeView?sfdc.tabName=01r100000001yyc
+// @match        https://opthd.lightning.force.com/lightning/n/teamspirit__AtkWorkTimeTab
+// @match        https://opthd--teamspirit.visualforce.com/apex/AtkWorkTimeView*
+// @run-at       document-end
 // @grant        none
 // ==/UserScript==
 
-;(function() {
+;(function () {
     'use strict'
 
+    const origin = 'http://localhost:3000'
+
     async function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms))
+        return new Promise((resolve) => setTimeout(resolve, ms))
     }
 
     // load 完了後に callback 関数を実行する
@@ -29,26 +33,25 @@
 
     // 工数を第一項目で埋める形で入力
     async function inputKousu(dayRow) {
-        const kousuuButton = dayRow.getElementsByClassName('dval vjob')[0]
+        dayRow.getElementsByClassName('dval vjob')[0].click() // ウィンドウを開く
 
-        // 工数入力バーの動かし方が分からないので、時間入力後ウィンドウを開き直して時計ボタンを押すと、時間をその日の稼働時間に変更してくれる仕様を利用する。
-        kousuuButton.click() // ウィンドウを開く
-        document.getElementById('empWorkLock0').click()
-        document.getElementById('empInputTime0').value = '1:00'
+        const arrow = document.getElementsByClassName(
+            'dijitSliderIncrementIconH'
+        )[0]
+        arrow.dispatchEvent(new MouseEvent('mousedown'))
+        arrow.dispatchEvent(new MouseEvent('mouseup'))
+
         document.getElementById('empWorkOk').click() // 登録ボタンのクリック
-        await loadedHook(() => {
-            kousuuButton.click() // ウィンドウを開く
-            document.getElementById('empWorkLock0').click()
-            document.getElementById('empWorkOk').click() // 登録ボタンのクリック
-        })
     }
 
     // num 個休憩時間入力用のテクストボックスを追加する
     async function addKyuukeyTextBox(num) {
         const buttons = document.getElementsByClassName('pb_btn_plusL')
-        for (let i = 0; i < num; i++)
-            for (const e of buttons)
+        for (let i = 0; i < num; i++) {
+            for (const e of buttons) {
                 if (e.title === '休憩時間入力行追加') e.click()
+            }
+        }
     }
 
     // 出退勤休憩時刻の入力
@@ -88,9 +91,7 @@
         try {
             // cretech_kintai 部屋情報の取得
             // { shukkinTime: string; taikinTime: string; kyuukeiTimes: Array<string> } 型のJSONが返る
-            const res = await fetch(
-                `http://localhost:3000/${year}/${month}/${day}`
-            )
+            const res = await fetch(`${origin}/${year}/${month}/${day}`)
             const kintaiData = await (res.ok ? res.json() : Promise.reject(res))
             console.log(kintaiData)
 
@@ -115,14 +116,20 @@
 
         for (let day = 1; day < table.length - 1; day++) {
             let button = document.createElement('button')
+            button.style.backgroundImage =
+                'url("https://cdn.glitch.com/b7bdb756-5cf5-4040-a1f8-32c1ecaba205%2Ffurueru_sisisin.gif?1530642080549")'
+            button.style.backgroundSize = 'contain'
+            button.style.border = 'none'
+            button.style.width = '20px'
+            button.style.height = '20px'
             button.onclick = () => run(year, month, day)
-            button.classList.add('png-add')
+            // button.classList.add('png-add')
 
             const row = table[day]
             const dayKind = row.getElementsByClassName('dval vstatus')[0].title
             // 工数記入済みなら true
             const written = Boolean(
-                row.cells[7].getElementsByClassName('work-job-time').length
+                row.cells[8].getElementsByClassName('work-job-time').length
             )
 
             if (dayKind.includes('通常出勤日') && !written) {
@@ -133,5 +140,5 @@
         }
     }
 
-    setInterval(setButton, 500)
+    setInterval(setButton, 1000)
 })()
