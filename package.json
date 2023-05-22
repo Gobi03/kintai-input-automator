@@ -29,24 +29,24 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^18.8.4",
-    "minimist": ">=1.2.7",
-    "npm-check-updates": "^16.3.11",
-    "parcel": "^2.7.0",
-    "prettier": "^2.7.1",
+    "@types/node": "^20.2.3",
+    "minimist": ">=1.2.8",
+    "npm-check-updates": "^16.10.12",
+    "parcel": "^2.8.3",
+    "prettier": "^2.8.8",
     "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.3.0",
-    "typescript": "^4.8.4"
+    "typescript": "^5.0.4"
   },
   "engines": {
     "node": ">=16",
     "npm": ">=8"
   },
   "dependencies": {
-    "@slack/bolt": "^3.12.1",
+    "@slack/bolt": "^3.13.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "minimist": ">=1.2.7"
+    "minimist": ">=1.2.8"
   }
 }
